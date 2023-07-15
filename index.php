@@ -1,4 +1,11 @@
 <?php
+session_start();
+
+if (!isset ($_SESSION['login'])) {
+    echo "<script>
+        window.location.replace('login.php');
+        </script>";
+}
 require "functions.php";
 
 $rows = tampil("SELECT * FROM tas");
@@ -19,6 +26,7 @@ if (isset($_POST['cari'])) {
     <title>Daftar Barang dalam Tas</title>
 </head>
 <body>
+    <a href="logout.php">Logout</a>
     <h1>Daftar Barang dalam Tas</h1>
     <a href="tambah.php">Tambah Daftar Barang dalam Tas</a><br><br>
 

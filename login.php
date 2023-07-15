@@ -1,4 +1,11 @@
 <?php
+session_start();
+
+if (isset ($_SESSION['login'])) {
+    echo "<script>
+        window.location.replace('index.php');
+        </script>";
+}
 require "functions.php";
 if (isset($_POST['login'])){
 
@@ -14,6 +21,7 @@ if (isset($_POST['login'])){
         $row = mysqli_fetch_assoc($result);
        if ( password_verify($password, $row['password'])){
             // header("Location : index.php");
+            $_SESSION['login'] = true;
             echo "<script>
             window.location.replace('index.php');
                    </script>";

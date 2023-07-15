@@ -1,4 +1,11 @@
 <?php
+session_start();
+
+if (!isset ($_SESSION['login'])) {
+    echo "<script>
+        window.location.replace('login.php');
+        </script>";
+}
 require "functions.php";
 $id = $_GET['id'];
 
