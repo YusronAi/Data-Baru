@@ -8,7 +8,19 @@ if (!isset ($_SESSION['login'])) {
 }
 require "functions.php";
 
-$rows = tampil("SELECT * FROM tas");
+// Pagination
+// Konfigurasi
+
+$jumlahDataPerHalaman = 2;
+$jumlahData = count(tampil("SELECT * FROM tas"));
+$jumlahHalaman = ceil($jumlahData / $jumlahDataPerHalaman);
+$halamanAktif = (isset($_GET["halaman"]) ) ? $_GET["halaman"] : 1;
+$awalData = ( $jumlahDataPerHalaman * $halamanAktif ) - $jumlahDataPerHalaman;
+
+
+$rows = tampil("SELECT * FROM tas LIMIT $awalData, $jumlahDataPerHalaman");
+
+// Tombol cari ditekan
 
 if (isset($_POST['cari'])) {
     $rows = cari($_POST['keyword']);
@@ -34,7 +46,25 @@ if (isset($_POST['cari'])) {
         <input type="text" name="keyword" id="" autofocus autocomplete="off"
         placeholder="Masukkan keyword..." size="38">
         <button type="submit" name="cari">Cari</button><br><br>
-    </form>
+    </form><br>
+
+    <!-- nafigasi -->
+
+    <?php if ( $halamanAktif > 1 ) : ?>
+        <a href='?halaman=<?= $halamanAktif - 1; ?>'>&laquo;</a>
+    <?php endif; ?>
+
+    <?php for ($i = 1; $i <= $jumlahHalaman; $i++) : ?>
+        <?php if( $i == $halamanAktif ) : ?>
+            <a href="?halaman=<?= $i ?>" style="font-weight: 500; color: red;"><?= $i ?></a>
+        <?php else: ?>
+            <a href="?halaman=<?= $i ?>" ><?= $i ?></a>
+        <?php endif; ?>
+    <?php endfor; ?>
+
+    <?php if ( $halamanAktif < $jumlahHalaman) : ?>
+        <a href="?halaman=<?= $halamanAktif + 1 ?>">&raquo;</a>
+    <?php endif; ?>
 
     <form action="" method="post">
         <table cellspacing="10" cellpaddding="10" border="10">
